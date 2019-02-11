@@ -4,6 +4,8 @@ const publicPath = path.join(__dirname, '../public');
 const express = require('express');
 const cors = require('cors');
 const socketIO = require('socket.io');
+const axios = require('axios');
+const dotenv = require('dotenv');
 
 const app = express();
 const server = http.createServer(app);
@@ -11,7 +13,10 @@ const io = socketIO(server);
 const port = process.env.PORT || 3000;
 
 //require helper functions
-const { createMessage } = require('./utils/message');
+const { createMessage, createLocationMessage } = require('./utils/message');
+
+//Load environment variables
+dotenv.load();
 
 //Middlewares
 app.use(cors());
@@ -38,6 +43,10 @@ io.on('connection', (socket) => {
         //     ...messageData,
         //     createdAt: new Date().getTime()
         // });
+    });
+
+    socket.on('createLocationMessage', (coordinates) => {
+        io.emit('newLocationMessage', createLocationMessage('Admin', coordinates.lat, coordinates.lng));
     });
 
     socket.on('disconnect', () => {
