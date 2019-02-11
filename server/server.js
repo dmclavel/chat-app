@@ -14,20 +14,33 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected!');
-    
-    // socket.emit
-    socket.emit('newMessage', {
-        createdAt: 12121212121,
-        from: 'Gio',
-        text: 'Hello'
-    });
+
     //emit -> instead of listening to an event, it is creating an event
+    socket.on('onUserJoin', (userName) => {
+        socket.emit('welcomeGreeting', {    //for individual user
+            from: 'Admin',
+            text: 'Welcome to the chat app!'
+        });
+
+        socket.broadcast.emit('welcomeGreeting', {  //broadcast to everyone except the user
+            from: 'Admin',
+            text: `${userName} has joined the chatroom!`,
+            createdAt: new Date().getTime()
+        });
+    });
 
     socket.on('createMessage', (messageData) => {
         io.emit('newMessage', {
             ...messageData, 
             createdAt: new Date().getTime()
         });
+
+        /** Broadcasting **/
+        // Will broadcast to other clients except yourself
+        // socket.broadcast.emit('newMessage', {
+        //     ...messageData,
+        //     createdAt: new Date().getTime()
+        // });
     });
 
     socket.on('disconnect', () => {
