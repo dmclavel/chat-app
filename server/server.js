@@ -9,6 +9,9 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const port = process.env.PORT || 3000;
 
+//require helper functions
+const { createMessage } = require('./utils/message');
+
 //Middlewares
 app.use(express.static(publicPath));
 
@@ -17,23 +20,14 @@ io.on('connection', (socket) => {
 
     //emit -> instead of listening to an event, it is creating an event
     socket.on('onUserJoin', (userName) => {
-        socket.emit('welcomeGreeting', {    //for individual user
-            from: 'Admin',
-            text: 'Welcome to the chat app!'
-        });
+        socket.emit('welcomeGreeting', createMessage('Admin', 'Welcome to the chat app!'));    //for individual user
 
-        socket.broadcast.emit('welcomeGreeting', {  //broadcast to everyone except the user
-            from: 'Admin',
-            text: `${userName} has joined the chatroom!`,
-            createdAt: new Date().getTime()
-        });
+        //broadcast to everyone except the user
+        socket.broadcast.emit('welcomeGreeting', createMessage('Admin', `${userName} has joined the chatroom!`));   
     });
 
     socket.on('createMessage', (messageData) => {
-        io.emit('newMessage', {
-            ...messageData, 
-            createdAt: new Date().getTime()
-        });
+        io.emit('newMessage', createMessage(messageData.from, messageData.text));
 
         /** Broadcasting **/
         // Will broadcast to other clients except yourself
