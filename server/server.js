@@ -26,9 +26,10 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('welcomeGreeting', createMessage('Admin', `${userName} has joined the chatroom!`));   
     });
 
-    socket.on('createMessage', (messageData) => {
+    //Event acknowledgments 
+    socket.on('createMessage', (messageData, callback) => {
         io.emit('newMessage', createMessage(messageData.from, messageData.text));
-
+        callback('This is from the server!');   //acknowledgment (serves as a server response)
         /** Broadcasting **/
         // Will broadcast to other clients except yourself
         // socket.broadcast.emit('newMessage', {
