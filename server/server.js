@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const publicPath = path.join(__dirname, '../public');
 const express = require('express');
+const cors = require('cors');
 const socketIO = require('socket.io');
 
 const app = express();
@@ -13,6 +14,7 @@ const port = process.env.PORT || 3000;
 const { createMessage } = require('./utils/message');
 
 //Middlewares
+app.use(cors());
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
