@@ -8,5 +8,17 @@
 </head>
 <body>
     <div> SAMPLE PAGE </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();   //initiate request from the client to the server
+        
+        socket.on('connect', () => {
+            console.log('Connected to server!');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server!');
+        });
+    </script>
 </body>
 </html>
