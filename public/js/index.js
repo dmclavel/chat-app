@@ -44,7 +44,6 @@ socket.on('disconnect', function () {
 });
 
 const sideBar = jQuery('#side-bar');
-console.log(sideBar[0].style);
 sideBar.on('click', function () {
     const leftSide = jQuery('.OnlineUsers')[0];
     if (leftSide.classList.length === 1)
