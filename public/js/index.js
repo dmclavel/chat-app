@@ -43,6 +43,16 @@ socket.on('disconnect', function () {
     console.log('Disconnected from server!');
 });
 
+const sideBar = jQuery('#side-bar');
+console.log(sideBar[0].style);
+sideBar.on('click', function () {
+    const leftSide = jQuery('.OnlineUsers')[0];
+    if (leftSide.classList.length === 1)
+        leftSide.classList.add('LeftSideAdd');
+    else 
+        leftSide.classList.remove('LeftSideAdd');
+});
+
 jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
 
@@ -69,4 +79,17 @@ locationButton.on('click', function () {
     }, function () {
         alert('Unable to fetch location.');
     });
+});
+
+const sendButton = jQuery('#send-message');
+
+sendButton.on('click', function () {
+    socket.emit('createMessage', {
+        from: 'User',
+        text: jQuery('[name=message]').val()
+    }, function () {
+        
+    });
+    const textArea = document.getElementsByTagName('textarea');
+    Array.from(textArea)[0].value = '';
 });
