@@ -71,6 +71,22 @@ body, html {
     color: #9F8270;
 }
 
+#img-location {
+    display: none;
+}
+
+.ShowGif {
+    display: block !important;  /* Overwrite the id selector specifity */
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+    bottom: 20%;
+    right: 0;
+    z-index: 10;
+    border-radius: 50%;
+    border: 2px solid gray;
+}
+
 #send-message {
     bottom: 1%;
     right: 1%;
@@ -79,6 +95,12 @@ body, html {
 #send-location {
     bottom: 1%;
     right: 3%;
+}
+
+.DisabledButton {
+    cursor: not-allowed !important; /* Overwrite CSS specifity for id selector */
+    color: rgba(0,0,0,0.5) !important;
+    pointer-events: none;   /* IE browser issues for older versions */
 }
 
 .MessageBox {

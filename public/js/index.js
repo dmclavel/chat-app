@@ -3,10 +3,9 @@ const socket = io();   //initiate request from the client to the server
 socket.on('connect', function () {
     console.log('Connected to server!');
 
-    socket.emit('onUserJoin', 'Daimler');
+    socket.emit('onUserJoin', 'A user');
 
     socket.on('newMessage', function (message) {
-        console.log(message);
         const li = jQuery('<li></li>');
         li.text(`${message.from}: ${message.text}`);
 
@@ -24,7 +23,6 @@ socket.on('connect', function () {
     });
 
     socket.on('welcomeGreeting', function (message) {
-        console.log(message);
         const li = jQuery('<li></li>');
         li.text(`${message.from}: ${message.text}`);
 
@@ -40,7 +38,7 @@ socket.on('connect', function () {
 });
 
 socket.on('disconnect', function () {
-    console.log('Disconnected from server!');
+    alert('Disconnected from server!');
 });
 
 const sideBar = jQuery('#side-bar');
@@ -64,13 +62,19 @@ jQuery('#message-form').on('submit', function (e) {
 });
 
 const locationButton = jQuery('#send-location');
+const imgLocation = jQuery('#img-location');
 
 locationButton.on('click', function () {
     if (!navigator.geolocation) {
         return alert('Geolocation not supported by your browser!');
     }
 
+    locationButton[0].classList.add('DisabledButton');    
+    imgLocation[0].classList.add('ShowGif');
+
     navigator.geolocation.getCurrentPosition(function (position) {
+        locationButton[0].classList.remove('DisabledButton'); 
+        imgLocation[0].classList.remove('ShowGif');
         socket.emit('createLocationMessage', {
             lat: position.coords.latitude,
             lng: position.coords.longitude
