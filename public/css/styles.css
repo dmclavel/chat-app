@@ -133,6 +133,25 @@ body, html {
     background-color: #1D1806;
 }
 
+.message {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+}
+
+.message__title {
+    display: inline-flex;
+}
+
+.message__title > span {
+    width: auto;
+    margin-right: 0.75rem;
+}
+
+.message__body {
+    display: flex;
+}
+
 @media only screen and (max-width: 700px) {
     .OnlineUsers {
         display: none;
