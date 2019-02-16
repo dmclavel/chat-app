@@ -10,13 +10,18 @@ const dotenv = require('dotenv');
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const { Users } = require('./utils/users');
 const port = process.env.PORT || 3000;
 
 //require helper functions
 const { createMessage, createLocationMessage } = require('./utils/message');
+const { instanceOfString } = require('./utils/validation');
 
 //Load environment variables
 dotenv.load();
+
+//Instantiate Users
+const users = new Users();
 
 //Middlewares
 app.use(cors());
@@ -24,14 +29,6 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected!');
-
-    //emit -> instead of listening to an event, it is creating an event
-    socket.on('onUserJoin', (userName) => {
-        socket.emit('welcomeGreeting', createMessage('Admin', 'Welcome to the chat app!'));    //for individual user
-
-        //broadcast to everyone except the user
-        socket.broadcast.emit('welcomeGreeting', createMessage('Admin', `${userName} has joined the chatroom!`));   
-    });
 
     //Event acknowledgments 
     socket.on('createMessage', (messageData, callback) => {
@@ -45,12 +42,37 @@ io.on('connection', (socket) => {
         // });
     });
 
+    socket.on('join', (params, callback) => {
+        if (!instanceOfString(params.name) || !instanceOfString(params.room)) 
+            callback('Name and Room are required. Empty spaces not allowed.');
+        else {
+            socket.join(params.room);
+            users.removeUser(socket.id);
+            users.addUser(socket.id, params.name, params.room);
+
+            io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+            //emit -> instead of listening to an event, it is creating an event
+            socket.on('onUserJoin', (userName) => {
+                socket.emit('welcomeGreeting', createMessage('Admin', 'Welcome to the chat app!'));    //for individual user
+
+                //broadcast to everyone except the user
+                socket.broadcast.to(params.room).emit('welcomeGreeting', createMessage('Admin', `${params.name} has joined the chatroom!`));   
+            });
+        }
+    });
+
     socket.on('createLocationMessage', (coordinates) => {
         io.emit('newLocationMessage', createLocationMessage('Admin', coordinates.lat, coordinates.lng));
     });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
+        const user = users.removeUser(socket.id);
+
+        if (user !== []) {
+            io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+            io.to(user.room).emit('newMessage', createMessage('Admin', `${user.name} has left the chatroom!`));
+        }
     });
 });
 

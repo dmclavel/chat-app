@@ -16,9 +16,41 @@ function scrollToBottom () {
         messages.scrollTop(scrollHeight);
     }
 }
+
+function parseUrlParams () {
+    let params = window.location.search;
+    let paramsObject = {};
+
+    //Replace ? with empty string and split multiple params
+    params = params.replace(/^\?/, '').split('&');
+    
+    for (let i=0; i < params.length; i++) {
+        const param = decodeURIComponent(params[i]).split('=');
+        for (let j=0; j < param.length; j++) {
+            const key = param[0].replace(/[\+]/g, ' ');
+            const value = param[1].replace(/[\+]/g, ' ');   //replace all occurences of +
+
+            paramsObject[key] = value.trim();   //remove only trailing spaces
+        }
+    } 
+
+    return paramsObject;
+}
         
 socket.on('connect', function () {
     console.log('Connected to server!');
+
+    const params = parseUrlParams();
+
+    socket.emit('join', params, function (error) {
+        if (error) {
+            alert(error);
+            return window.location.href = '/';
+        }   
+        
+        //else if successful joining
+        socket.join(params.room);   //a socket io feature -> socket,leave to room
+    });
 
     socket.emit('onUserJoin', 'A user');
 
@@ -62,6 +94,16 @@ socket.on('connect', function () {
     // }, function (response) {    //callback function to know if data are gotten back from the server
     //     console.log('Got the data! ', response);
     // });
+});
+
+socket.on('updateUserList', function (users) {
+    const ul = jQuery('<ul></ul>');
+
+    users.forEach(function (user) {
+        ul.append(jQuery('<li></li>').text(user));
+    });
+
+    jQuery('#online-users').html(ul);
 });
 
 socket.on('disconnect', function () {

@@ -27,11 +27,28 @@ body, html {
     background-color: #1D1806;
 }
 
-.OnlineUsers h1{
+.OnlineUsers > h1 {
     font-family: 'Arvo', serif;
     color: #fff;
     font-size: 1rem;
+    text-align: center;
 }
+
+.OnlineUsers > div {
+    font-family: 'Arvo', serif;
+    color: #fff;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.OnlineUsers > div > ul {
+    list-style: outside;
+}
+
+.OnlineUsers > div > ul > li {
+    margin: 1rem 0;
+}
+
 
 .MainContent {
     display: flex;
