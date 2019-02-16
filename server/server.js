@@ -32,7 +32,12 @@ io.on('connection', (socket) => {
 
     //Event acknowledgments 
     socket.on('createMessage', (messageData, callback) => {
-        io.emit('newMessage', createMessage(messageData.from, messageData.text));
+        const user = users.getUser(socket.id);
+
+        if (user !== [] && instanceOfString(messageData.text)) {
+            io.to(user[0].room).emit('newMessage', createMessage(user[0].name, messageData.text));
+        }
+
         callback('This is from the server!');   //acknowledgment (serves as a server response)
         /** Broadcasting **/
         // Will broadcast to other clients except yourself
@@ -44,7 +49,7 @@ io.on('connection', (socket) => {
 
     socket.on('join', (params, callback) => {
         if (!instanceOfString(params.name) || !instanceOfString(params.room)) 
-            callback('Name and Room are required. Empty spaces not allowed.');
+            callback('Only 25 characters are allowed for the display name and room name. Empty spaces not allowed.');
         else {
             socket.join(params.room);
             users.removeUser(socket.id);
@@ -62,7 +67,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createLocationMessage', (coordinates) => {
-        io.emit('newLocationMessage', createLocationMessage('Admin', coordinates.lat, coordinates.lng));
+        const user = users.getUser(socket.id);
+
+        if (user !== []) {
+            io.to(user[0].room).emit('newLocationMessage', createLocationMessage('Admin', coordinates.lat, coordinates.lng));
+        }
     });
 
     socket.on('disconnect', () => {

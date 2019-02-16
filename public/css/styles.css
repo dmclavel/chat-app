@@ -42,11 +42,19 @@ body, html {
 }
 
 .OnlineUsers > div > ul {
-    list-style: outside;
+    list-style: none;
+    padding-inline-start: 0;
+    word-break: break-all;
 }
 
 .OnlineUsers > div > ul > li {
-    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 5px;
+    color: rgb(79, 160, 90);
+    margin: 1rem;
+    text-align: center;
+    font-weight: bold;
 }
 
 
