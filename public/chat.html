@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Montserrat|Arvo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title> Chat App </title>
+    <meta name="theme-color" content="#1D1806">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="ChatWindow">
+        <i id="side-bar" class="material-icons">menu</i>
+        <div class="OnlineUsers">
+            <h1> Chat App </h1>
+        </div>
+        <div class="MainContent">
+            <ol class="MessageBox" id="messages"></ol>
+            
+            <form id="message-form">
+                <textarea placeholder="Send a message..." name="message"></textarea>
+                <i id="send-message" class="material-icons">send</i>
+                <i id="send-location" class="material-icons">location_on</i>
+                <img id ="img-location" src="https://media.giphy.com/media/3ksOEZuT2Zg3W6ZQIz/giphy.gif" alt="sending-location" />
+            </form>
+        </div>
+    </div>
+
+    <script id="message-template" type="text/template">
+        <li class="message">
+            <div class="message__title">
+                <span style="font-weight: bold;"> {{from}} </span>
+                <span style="color: silver;"> {{createdAt}} </span>
+            </div>
+            <div class="message__body">
+                <span style="padding-top: 0.3rem;"> {{text}} </span>
+            </div>
+        </li>
+    </script>
+
+    <script id="location-message-template" type="text/template">
+        <li class="message">
+            <div class="message__title">
+                <span style="font-weight: bold;"> {{from}} </span>
+                <span style="color: silver;"> {{createdAt}} </span>
+            </div>
+            <div class="message__body">
+                <a style="padding-top: 0.3rem;" href="{{url}}" target="_blank"> My current location </a>
+            </div>
+        </li>
+    </script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/libs/jquery-3.3.1.min.js"></script>
+    <script src="./js/libs/moment.js"></script>
+    <script src="./js/libs/mustache.js"></script>
+    <script src="./js/chat.js"></script>
+</body>
+</html>

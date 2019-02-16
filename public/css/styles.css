@@ -182,3 +182,50 @@ body, html {
         right: 10%;
     }
 }
+
+
+/* index.html */
+
+.centered { 
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: linear-gradient(to bottom right, #1D1806, rgba(0,0,0,0.7));
+}
+
+.centered__form {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.form__element {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+}
+
+.form__element__title {
+    text-align: center;
+    color: #9F8270;
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+}
+
+.form__element__btn {
+    background-color: #9F8270;
+    color: #fff;
+    cursor: pointer;
+    height: 1.5rem;
+    border-style: none;
+}
+
+.form__element > input {    /* direct inheritance only */
+    display: flex;
+    height: 2rem;
+    margin-top: 0.5rem;
+}
