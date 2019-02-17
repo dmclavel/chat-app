@@ -113,10 +113,16 @@ socket.on('disconnect', function () {
 const sideBar = jQuery('#side-bar');
 sideBar.on('click', function () {
     const leftSide = jQuery('.OnlineUsers')[0];
-    if (leftSide.classList.length === 1)
+
+    if (leftSide.classList.length === 1) {
         leftSide.classList.add('LeftSideAdd');
-    else 
+    } else if (leftSide.classList.length === 2 && Array.from(leftSide.classList).includes('LeftSideRemove')) {
+        leftSide.classList.remove('LeftSideRemove');
+        leftSide.classList.add('LeftSideAdd');
+    } else {
         leftSide.classList.remove('LeftSideAdd');
+        leftSide.classList.add('LeftSideRemove');
+    }
 });
 
 jQuery('#message-form').on('submit', function (e) {

@@ -19,11 +19,13 @@ body, html {
 }
 
 .OnlineUsers {
-    display: inline-flex;
+    opacity: 1;
     flex-direction: column;
     align-items: center;
     width: 20%;
     height: 100%;
+    position: absolute;
+    z-index: 1;
     background-color: #1D1806;
 }
 
@@ -64,25 +66,29 @@ body, html {
     width: 80%;
     height: 100%;
     flex-direction: column;
+    position: absolute;
+    left: 20%;
     background: linear-gradient(to bottom right, #1D1806, rgba(0,0,0,0.7));
 }
 
 #message-form {
+    display: flex;
+    align-items: flex-end;
     width: auto;
     height: 20%;
     margin: 1rem;
     position: relative;
 }
 
-#message-form > textarea {
+#message-form > input {
     font-family: 'Roboto', sans-serif;
     font-size: 1.2rem;
     resize: none;
     width: 100%;
-    height: 100%;
+    height: 60%;
 }
 
-#message-form > textarea::placeholder {
+#message-form > input::placeholder {
     font-family: 'Roboto', sans-serif;
     font-size: 1.2rem;
 }
@@ -119,7 +125,7 @@ body, html {
 
 #send-location {
     bottom: 1%;
-    right: 3%;
+    right: 5%;
 }
 
 .DisabledButton {
@@ -149,13 +155,11 @@ body, html {
 }
 
 .LeftSideAdd {
-    display: inline-flex !important;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 50px;
-    width: 40%;
-    height: 100%;
-    background-color: #1D1806;
+    opacity: 1;
+}
+
+.LeftSideRemove {
+    opacity: 1;
 }
 
 .message {
@@ -179,7 +183,7 @@ body, html {
 
 @media only screen and (max-width: 700px) {
     .OnlineUsers {
-        display: none;
+        opacity: 0;
     }
 
     #side-bar {
@@ -190,11 +194,13 @@ body, html {
         position: fixed;
         top: 10px;
         left: 5px;
+        z-index: 2;
     }
 
     .MainContent {
         width: 100%;
         padding-top: 1.5rem;
+        position: static;
     }
 
     #send-message {
@@ -204,7 +210,25 @@ body, html {
     
     #send-location {
         bottom: 1%;
-        right: 10%;
+        right: 12%;
+    }
+
+    .LeftSideAdd {
+        opacity: 0;
+        animation: openSideBar 500ms ease-in forwards;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 50px;
+        width: 60%;
+        height: 100%;
+        background-color: #1D1806;
+        position: absolute;
+        z-index: 1;
+    }
+    
+    .LeftSideRemove {
+        opacity: 0;
+        animation: closeSideBar 500ms ease-in-out forwards;
     }
 }
 
@@ -253,4 +277,36 @@ body, html {
     display: flex;
     height: 2rem;
     margin-top: 0.5rem;
+}
+
+/* chat.html side bar animations */
+
+@keyframes openSideBar {
+    0% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(-50vw);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes closeSideBar {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(-50vw);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
 }
